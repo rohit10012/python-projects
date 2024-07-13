@@ -9,20 +9,11 @@ ENV PYTHONUNBUFFERED=1
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the requirements.txt file to the working directory
-COPY requirements.txt .
-
-# Install the dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy the rest of the application code to the working directory
+# Copy the Python script files and .env file to the working directory
 COPY . .
 
-# Ensure the .env file is copied to the container
-COPY .env /app/.env
-
-# Copy the responses.json file to the working directory
-COPY responses.json /app/responses.json
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Set the command to run the bot
 CMD ["python", "telegram_bot.py"]
