@@ -2,9 +2,8 @@ version: '3.8'
 
 services:
   telegram_bot:
-    build: .
-    env_file:
-      - .env
-    volumes:
-      - .:/app
-    restart: unless-stopped
+    build:
+      context: .
+    environment:
+      - TOKEN=${TOKEN}
+      - BOT_USERNAME=${BOT_USERNAME}

@@ -1,53 +1,57 @@
-from typing import Final
+import logging
 from telegram import Update
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+from telegram.ext import Updater, CommandHandler, MessageHandler, filters, CallbackContext
 from dotenv import load_dotenv
 import os
-from handle_response import ResponseHandler
+from queue import Queue
 
-# Load environment variables from .env
+my_queue = Queue()
+
+# Load environment variables
 load_dotenv()
 
-# Constants
-TOKEN: Final[str] = os.getenv('TOKEN')
-BOT_USERNAME: Final[str] = os.getenv('BOT_USERNAME')
+# Setup logging
+logging.basicConfig(filename='chat.log', format='%(asctime)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger()
 
-async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('Hello There! Nice to meet you. Let\'s Chat!')
+# Telegram Bot token from environment variables
+TOKEN = os.getenv('TOKEN')
 
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('Just type something and I will respond to you!')
+def start(update: Update, context: CallbackContext):
+    update.message.reply_text('Hello! I am your bot. How can I help you today?')
 
-async def custom_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text('This is a custom command')
+def handle_message(update: Update, context: CallbackContext):
+    user = update.message.from_user
+    text = update.message.text
+    
+    # Log the chat message
+    logger.info(f"User {user.username}: {text}")
 
-async def handle_response(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    handler = ResponseHandler()
-    message_text = update.message.text
-    response = handler.get_response(message_text)
-    await update.message.reply_text(response)
+    # Process the message
+    response = "I received your message!"
 
-async def error(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    print(f'Update {update} caused error: {context.error}')
+    # Send the response back to the user
+    update.message.reply_text(response)
 
 def main():
-    print('Starting up bot...')
+    # Create the Updater with the update queue
+    updater = Updater(TOKEN, update_queue=my_queue)
 
-    app = Application.builder().token(TOKEN).build()
+    # Get the dispatcher to register handlers
+    dp = updater.dispatcher
 
-    # Commands
-    app.add_handler(CommandHandler('start', start_command))
-    app.add_handler(CommandHandler('help', help_command))
-    app.add_handler(CommandHandler('custom', custom_command))
-    
-    # Messages
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_response))
+    # Register command handlers
+    dp.add_handler(CommandHandler("start", start))
 
-    # Errors
-    app.add_error_handler(error)
+    # Register message handler to handle text messages
+    dp.add_handler(MessageHandler(filters.text & ~filters.command, handle_message))
 
-    print('Polling...')
-    app.run_polling(poll_interval=5)
+    # Start the Bot
+    updater.start_polling()
+    logger.info("Bot started polling...")
+
+    # Run the bot until you press Ctrl-C or the process receives SIGINT, SIGTERM, or SIGABRT
+    updater.idle()
 
 if __name__ == '__main__':
     main()
