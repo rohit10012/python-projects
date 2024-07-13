@@ -1,0 +1,44 @@
+{
+    "responses": [
+        {
+            "question": "hello",
+            "answer": "Hey there!"
+        },
+        {
+            "question": "how are you",
+            "answer": "I am good, thanks!"
+        },
+        {
+            "question": "i love python",
+            "answer": "Python is cool."
+        },
+        {
+            "question": "what is your name",
+            "answer": "I am a cool bot!"
+        },
+        {
+            "question": "what can you do",
+            "answer": "I can chat with you, tell you the weather, and much more!"
+        },
+        {
+            "question": "tell me a joke",
+            "answer": "Why did the scarecrow win an award? Because he was outstanding in his field!"
+        },
+        {
+            "question": "what is the meaning of life",
+            "answer": "The meaning of life is to give life a meaning."
+        },
+        {
+            "question": "what time is it",
+            "answer": "I am a bot, I don’t have a watch, but you can check your device!"
+        },
+        {
+            "question": "what is the capital of France",
+            "answer": "The capital of France is Paris."
+        },
+        {
+            "question": "who created you",
+            "answer": "I was created by Rohit a human using Python and the Telegram Bot API."
+        }
+    ]
+}

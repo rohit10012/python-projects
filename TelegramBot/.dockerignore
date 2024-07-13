@@ -1,0 +1,16 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+myenv/
+
+# Git-related files
+.git
+.gitignore
+
+# Docker-specific files
+docker-compose.override.yml
+
